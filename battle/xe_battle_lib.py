@@ -3,23 +3,23 @@ import random
 
 # --- Message Templates ---
 ATTACK_MESSAGES = [
-    "🤺 {a_owner}'s {a_name} shoves into {d_owner}'s {d_name}, dealing {dmg} DMG!",
-    "🤺 {a_name} hoards a massive blow to {d_name}, lowering {dmg} DMG!",
-    "🤺 {a_owner}'s {a_name} slices {d_name} like sushi! ({dmg} DMG)",
-    "🤺 {a_name} launches an attack straight towards {d_name} for {dmg} DMG",
+    "🤺 | {a_owner}'s {a_name} shoves into {d_owner}'s {d_name}, dealing {dmg} DMG!",
+    "🤺 | {a_name} hoards a massive blow to {d_name}, lowering {dmg} DMG!",
+    "🤺 | {a_owner}'s {a_name} slices {d_name} like sushi! ({dmg} DMG)",
+    "🤺 | {a_name} launches an attack straight towards {d_name} for {dmg} DMG",
 ]
 
 DEFEAT_MESSAGES = [
-    "💀 {a_name} has easily crushed {d_name}!",
-    "💀 {d_owner}'s {d_name} has fallen to {a_owner}'s {a_name}.",
-    "💀 {a_name} knocks out {d_name}!",
-    "💀 {d_name} has been defeated!",
+    "💀 | {a_name} has easily crushed {d_name}!",
+    "💀 | {d_owner}'s {d_name} has fallen to {a_owner}'s {a_name}.",
+    "💀 | {a_name} knocks out {d_name}!",
+    "💀 | {d_name} has been defeated!",
 ]
 
 DODGE_MESSAGES = [
-    "❌ *{a_name} shimmys through {d_name} swing!*",
-    "❌ *{d_owner}'s {d_name} quickly evades {a_name}'s attack!*",
-    "❌ *{d_name} presses the mute button!*",
+    "❌ | *{a_name} shimmys through {d_name} swing!*",
+    "❌ | *{d_owner}'s {d_name} quickly evades {a_name}'s attack!*",
+    "❌ | *{d_name} presses the mute button!*",
 ]
 
 HEAL_MESSAGES = [
@@ -55,7 +55,7 @@ class BattleInstance:
 
 def get_damage(ball):
     base = ball.attack * random.uniform(0.5, 1)
-    is_super = random.random() < 0.25
+    is_super = random.random() < 0.20
     if is_super:
         return int(base * 1.5), True
     return int(base), False
@@ -97,7 +97,7 @@ def attack(current_ball, enemy_balls):
 
 def heal(current_ball):
     if current_ball.health >= current_ball.max_health * 0.7:
-        return f"**{current_ball.name}** tries to heal, but is already replenished!"
+        return f"**{current_ball.name}** tries to heal, but their health is already replenished!"
 
     missing_hp = current_ball.max_health - current_ball.health
     heal_amount = int(missing_hp * random.uniform(0.3, 0.6))
@@ -137,7 +137,7 @@ def gen_battle(battle: BattleInstance):
             if not p1_ball.dead:
                 turn += 1
 
-                if random.randint(1, 100) <= 20 and p1_ball.health < p1_ball.max_health - 300:
+                if random.randint(1, 100) <= 20 and p1_ball.health < p1_ball.max_health * 0.7:
                     yield f"Turn {turn}: {heal(p1_ball)}"
                     continue
 
@@ -154,7 +154,7 @@ def gen_battle(battle: BattleInstance):
             if not p2_ball.dead:
                 turn += 1
 
-                if random.randint(1, 100) <= 20 and p2_ball.health < p2_ball.max_health - 300:
+                if random.randint(1, 100) <= 20 and p2_ball.health < p2_ball.max_health * 0.7:
                     yield f"Turn {turn}: {heal(p2_ball)}"
                     continue
 
@@ -174,4 +174,5 @@ def gen_battle(battle: BattleInstance):
         battle.winner = battle.p1_balls[0].owner
 
     battle.turns = turn
+
 
