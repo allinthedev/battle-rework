@@ -26,6 +26,39 @@ if TYPE_CHECKING:
     from ballsdex.core.bot import BallsDexBot
 log = logging.getLogger("ballsdex.packages.battle")
 
+class SkipBattleView(View):
+    def __init__(self, player1_id, player2_id):
+        super().__init__(timeout=None)
+        self.player1_id = player1_id
+        self.player2_id = player2_id
+        self.clicked = set()
+        self.skip_event = asyncio.Event()
+        self.turns_passed = 0
+
+    def increment_turn(self):
+        self.turns_passed += 1
+
+    @discord.ui.button(label="Skip Battle", style=discord.ButtonStyle.red)
+    async def skip_battle(self, interaction, button):
+        if self.turns_passed < 10:
+            await interaction.response.send_message(
+                f"You can only skip the battle after 10 turns have passed. ({self.turns_passed}/10)", 
+                ephemeral=True
+            )
+            return
+
+        if interaction.user.id not in (self.player1_id, self.player2_id):
+            await interaction.response.send_message("You aren't in this battle!", ephemeral=True)
+            return
+        if interaction.user.id in self.clicked:
+            await interaction.response.send_message("You already clicked!", ephemeral=True)
+            return
+
+        self.clicked.add(interaction.user.id)
+        await interaction.response.send_message(f"{interaction.user.display_name} clicked skip!")
+        if self.clicked == {self.player1_id, self.player2_id}:
+            self.skip_event.set()
+
 @dataclass
 class GuildBattle:
     author: discord.Member
@@ -154,40 +187,58 @@ class Battle(commands.GroupCog):
 
             message = await interaction.followup.send(embed=embed, wait=True)
 
+            view = SkipBattleView(guild_battle.author.id, guild_battle.opponent.id)
+            await message.edit(embed=embed, view=view)
+
+            turn = 0  
+
             for turn_text in gen_battle(battle):
-                max_size = guild_battle.deck_size
+                turn += 1
+                view.increment_turn()
                 embed.description = turn_text
-                embed.set_footer(text=f"Max Deck Size: {max_size}")
-
-                updated_p1 = gen_deck(battle.p1_balls)
-                updated_p2 = gen_deck(battle.p2_balls)
-    
                 embed.set_field_at(
-                    0,
-                    name=f"{guild_battle.author.display_name}'s Battle Deck",
-                    value=updated_p1,
-                    inline=True,
+                    0, name=f"{guild_battle.author.display_name}'s Deck",
+                    value=gen_deck(battle.p1_balls), inline=True
                 )
                 embed.set_field_at(
-                    1,
-                    name=f"{guild_battle.opponent.display_name}'s Battle Deck",
-                    value=updated_p2,
-                    inline=True,
+                    1, name=f"{guild_battle.opponent.display_name}'s Deck",
+                    value=gen_deck(battle.p2_balls), inline=True
                 )
-
                 await message.edit(embed=embed)
-                await asyncio.sleep(3.5) # change the turn shift here if you want i mean idk
+
+                if view.skip_event.is_set():
+                    for _ in gen_battle(battle):
+                        turn += 1
+                    break
+                await asyncio.sleep(3)
+
+            battle.turns = turn
+
+            p1_total_hp = sum(ball.health for ball in battle.p1_balls if not ball.dead)
+            p2_total_hp = sum(ball.health for ball in battle.p2_balls if not ball.dead)
+
+            if p1_total_hp >= p2_total_hp:
+                battle.winner = guild_battle.author.display_name
+            else:
+                battle.winner = guild_battle.opponent.display_name
 
             embed.title = "Battle: Complete!"
             embed.color = discord.Color.green()
             embed.description = (
                 f"{guild_battle.author.mention} VS {guild_battle.opponent.mention}\n\n"
-                f"**Winner**: {battle.winner}\n"
-                f"Total Turns: {battle.turns}"
+                f"**Winner**: {battle.winner}\nTotal Turns: {battle.turns}\n"
+            )
+            embed.set_field_at(
+                0, name=f"{guild_battle.author.display_name}'s Final Deck",
+                value=gen_deck(battle.p1_balls), inline=True
+            )
+            embed.set_field_at(
+                1, name=f"{guild_battle.opponent.display_name}'s Final Deck",
+                value=gen_deck(battle.p2_balls), inline=True
             )
             embed.set_footer(text="Battle concluded.")
-            await message.edit(embed=embed, view=new_view)
-            
+
+            await message.edit(embed=embed, view=None)
             self.battles[interaction.guild_id] = None
 
         else:
@@ -437,6 +488,7 @@ class Battle(commands.GroupCog):
             await interaction.response.send_message(
                 f"That ball is not in your deck!", ephemeral=True
             )
+
 
 
 
