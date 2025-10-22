@@ -3,30 +3,30 @@ import random
 
 # --- Message Templates ---
 ATTACK_MESSAGES = [
-    "{a_owner}'s {a_name} shoves into {d_owner}'s {d_name}, dealing {dmg} DMG!",
-    "{a_name} hoards a massive blow to {d_name}, lowering {dmg} DMG!",
-    "{a_owner}'s {a_name} slices {d_name} like sushi! ({dmg} DMG)",
-    "{a_name} launches an attack straight towards {d_name} for {dmg} DMG",
+    "🤺 {a_owner}'s {a_name} shoves into {d_owner}'s {d_name}, dealing {dmg} DMG!",
+    "🤺 {a_name} hoards a massive blow to {d_name}, lowering {dmg} DMG!",
+    "🤺 {a_owner}'s {a_name} slices {d_name} like sushi! ({dmg} DMG)",
+    "🤺 {a_name} launches an attack straight towards {d_name} for {dmg} DMG",
 ]
 
 DEFEAT_MESSAGES = [
-    "{a_name} has easily crushed {d_name}!",
-    "{d_owner}'s {d_name} has fallen to {a_owner}'s {a_name}.",
-    "{a_name} knocks out {d_name}!",
-    "{d_name} has been defeated!",
+    "💀 {a_name} has easily crushed {d_name}!",
+    "💀 {d_owner}'s {d_name} has fallen to {a_owner}'s {a_name}.",
+    "💀 {a_name} knocks out {d_name}!",
+    "💀 {d_name} has been defeated!",
 ]
 
 DODGE_MESSAGES = [
-    "{a_name} conceives a plan, though {d_name} is already aware!",
-    "*{d_owner}'s {d_name} quickly evades {a_name}'s attack!*",
-    "{d_name} presses the mute button!",
+    "❌ *{a_name} shimmys through {d_name} swing!*",
+    "❌ *{d_owner}'s {d_name} quickly evades {a_name}'s attack!*",
+    "❌ *{d_name} presses the mute button!*",
 ]
 
 HEAL_MESSAGES = [
-    "{a_owner}'s {a_name} uses a recovery move and heals {heal} HP!",
-    "{a_name} shines brightly and regains {heal} health!",
-    "{a_name} patches itself up for {heal} HP!",
-    "{a_owner}'s {a_name} drinks a potion and restores {heal} HP!",
+    "❤️‍🩹 | {a_owner}'s {a_name} uses a recovery move and heals {heal} HP!",
+    "❤️‍🩹 | {a_name} shines brightly and regains {heal} health!",
+    "❤️‍🩹 | {a_name} patches itself up for {heal} HP!",
+    "❤️‍🩹 | {a_owner}'s {a_name} drinks a potion and restores {heal} HP!",
 ]
 
 def format_random(msg_list, **kwargs):
@@ -95,12 +95,12 @@ def attack(current_ball, enemy_balls):
 
     return text
 
-
 def heal(current_ball):
-    if current_ball.health >= current_ball.max_health - 300:
+    if current_ball.health >= current_ball.max_health * 0.7:
         return f"**{current_ball.name}** tries to heal, but is already replenished!"
 
-    heal_amount = int(current_ball.attack * random.uniform(0.3, 0.6))
+    missing_hp = current_ball.max_health - current_ball.health
+    heal_amount = int(missing_hp * random.uniform(0.3, 0.6))
     old_health = current_ball.health
     current_ball.health = min(current_ball.health + heal_amount, current_ball.max_health)
     actual_heal = current_ball.health - old_health
@@ -174,3 +174,4 @@ def gen_battle(battle: BattleInstance):
         battle.winner = battle.p1_balls[0].owner
 
     battle.turns = turn
+
