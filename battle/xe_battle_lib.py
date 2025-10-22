@@ -3,23 +3,23 @@ import random
 
 
 ATTACK_MESSAGES = [
-    "{a_owner}'s {a_name} sings a deadly tune to {d_owner}'s {d_name}, dealing {dmg} DMG!",
-    "{a_name} plays a nasty beat to {d_name}, bringing {dmg} DMG!",
-    "{a_owner}'s {a_name} slices {d_name}! ({dmg} DMG)",
-    "{a_name} blows their flute to {d_name} for {dmg} DMG",
+    "*{a_owner}'s* **{a_name}** shoves into *{d_owner}'s* *{d_name}*, dealing **{dmg}** DMG!",
+    "**{a_name}** hoards a massive blow to **{d_name}**, lowering **{dmg}** DMG!",
+    "*{a_owner}'s* **{a_name}** slices **{d_name}** like sushi! (**{dmg} DMG**)",
+    "**{a_name}** launches an attack straight towards **{d_name}** for **{dmg}** DMG",
 ]
 
 DEFEAT_MESSAGES = [
-    "{a_name} has easily crushed {d_name}!",
-    "{d_owner}'s {d_name} has fallen to {a_owner}'s {a_name}.",
-    "{a_name} knocks out {d_name}!",
-    "{d_name} has been defeated!",
+    "**{a_name}** has easily crushed **{d_name}**!",
+    "*{d_owner}*'s **{d_name}** has fallen to *{a_owner}*'s **{a_name}**.",
+    "**{a_name}** knocks out **{d_name}**!",
+    "**{d_name}** has been defeated!",
 ]
 
 DODGE_MESSAGES = [
-    "{a_name} tries to sing, but {d_name} ruins their pitch!!",
-    "{d_owner}'s {d_name} evades {a_owner}'s {a_name} attack!",
-    "{d_name} presses the mute button!!",
+    "**{a_name} concieves a plan, though {d_name} is already aware!",
+    "*{d_owner}'s **{d_name}** quickly evades **{a_name}**'s attack!",
+    "**{d_name}** presses the mute button!",
 ]
 
 
@@ -84,13 +84,13 @@ def attack(current_ball, enemy_balls):
         )
 
     if is_super:
-        text += " 💥 **CRITICAL HIT!**"
+        text += "/n💥 **CRITICAL HIT!**"
 
     return text
 
 
 def random_events(p1_ball, p2_ball):
-    if random.randint(1, 100) <= 30:
+    if random.randint(1, 100) <= 20:
         msg = format_random(
             DODGE_MESSAGES,
             a_owner=p2_ball.owner,
@@ -144,5 +144,6 @@ def gen_battle(battle: BattleInstance):
         battle.winner = battle.p1_balls[0].owner
 
     battle.turns = turn
+
 
 
