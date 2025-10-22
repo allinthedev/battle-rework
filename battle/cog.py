@@ -15,7 +15,7 @@ from ballsdex.core.models import Ball, Player
 from ballsdex.core.models import balls as countryballs
 from ballsdex.settings import settings
 
-from ballsdex.core.utils.transformers import BallInstanceTransform
+from ballsdex.core.utils.transformers import BallEnabledransform
 from ballsdex.packages.battle.xe_battle_lib import (
     BattleBall,
     BattleInstance,
@@ -301,7 +301,7 @@ class Battle(commands.GroupCog):
 
     @app_commands.command()
     async def add(
-        self, interaction: discord.Interaction, countryball: BallInstanceTransform
+        self, interaction: discord.Interaction, countryball: BallEnabledTransform
     ):
         """
         Add a ball to a battle.
@@ -371,7 +371,7 @@ class Battle(commands.GroupCog):
 
     @app_commands.command()
     async def remove(
-        self, interaction: discord.Interaction, countryball: BallInstanceTransform
+        self, interaction: discord.Interaction, countryball: BallEnabledTransform
     ):
         """
         Remove a ball from a battle.
@@ -437,5 +437,6 @@ class Battle(commands.GroupCog):
             await interaction.response.send_message(
                 f"That ball is not in your deck!", ephemeral=True
             )
+
 
 
