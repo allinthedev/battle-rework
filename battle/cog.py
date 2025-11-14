@@ -426,7 +426,7 @@ class Battle(commands.GroupCog):
         self, interaction: discord.Interaction, countryball: BallInstanceTransform
     ):
         """
-        Remove a ball from a battle.
+        Remove a fruit from a battle.
         """
         guild_battle = self.battles.get(interaction.guild_id)
         if not guild_battle:
@@ -489,6 +489,7 @@ class Battle(commands.GroupCog):
             await interaction.response.send_message(
                 f"That ball is not in your deck!", ephemeral=True
             )
+
 
 
 
