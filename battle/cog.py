@@ -356,7 +356,7 @@ class Battle(commands.GroupCog):
         self, interaction: discord.Interaction, countryball: BallInstanceTransform
     ):
         """
-        Add a ball to a battle.
+        Add a fruit to a battle.
         """
         guild_battle = self.battles.get(interaction.guild_id)
         if not guild_battle:
@@ -489,6 +489,7 @@ class Battle(commands.GroupCog):
             await interaction.response.send_message(
                 f"That ball is not in your deck!", ephemeral=True
             )
+
 
 
 
