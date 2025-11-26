@@ -5,8 +5,8 @@ import random
 ATTACK_MESSAGES = [
     "🤺 | {a_owner}'s {a_name} shoves into {d_owner}'s {d_name}, dealing {dmg} DMG!",
     "🤺 | {a_name} hoards a massive blow to {d_name}, lowering {dmg} DMG!",
-    "🤺 | {a_owner}'s {a_name} slices {d_name} like sushi! ({dmg} DMG)",
-    "🤺 | {a_name} launches an attack straight towards {d_name} for {dmg} DMG",
+    "🤺 | {a_owner}'s {a_name} slices {d_name} Fruit Ninja style! ({dmg} DMG)",
+    "🤺 | {a_name} launches a Haki-infused attack straight towards {d_name} for {dmg} DMG",
 ]
 
 DEFEAT_MESSAGES = [
@@ -19,14 +19,14 @@ DEFEAT_MESSAGES = [
 DODGE_MESSAGES = [
     "❌ | *{a_name} shimmys through {d_name} swing!*",
     "❌ | *{d_owner}'s {d_name} quickly evades {a_name}'s attack!*",
-    "❌ | *{d_name} presses the mute button!*",
+    "❌ | *{d_name} uses Future Sight to dodge!*",
 ]
 
 HEAL_MESSAGES = [
     "❤️‍🩹 | {a_owner}'s {a_name} uses a recovery move and heals {heal} HP!",
     "❤️‍🩹 | {a_name} shines brightly and regains {heal} health!",
     "❤️‍🩹 | {a_name} patches itself up for {heal} HP!",
-    "❤️‍🩹 | {a_owner}'s {a_name} drinks a potion and restores {heal} HP!",
+    "❤️‍🩹 | {a_owner}'s {a_name} eats some meat and restores {heal} HP!",
 ]
 
 def format_random(msg_list, **kwargs):
@@ -174,5 +174,6 @@ def gen_battle(battle: BattleInstance):
         battle.winner = battle.p1_balls[0].owner
 
     battle.turns = turn
+
 
 
