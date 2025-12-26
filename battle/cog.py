@@ -92,7 +92,7 @@ def update_embed(
     """Creates an embed for the battle setup phase."""
     embed = discord.Embed(
         title="Battle Plan",
-        description=f"Add or remove fruits you want to propose to the other player using the '/battle add' and '/battle remove' commands. Remember, you may add up to **{max_size}** fruits in a deck for this battle. Once you've finished, click the tick button to start the battle.",
+        description=f"Add or remove items you want to propose to the other player using the '/battle add' and '/battle remove' commands. Remember, you may add up to **{max_size}** items in a deck for this battle. Once you've finished, click the tick button to start the battle.",
         color=discord.Colour.blurple(),
     )
 
@@ -129,7 +129,7 @@ def create_disabled_buttons() -> discord.ui.View:
 
 class Battle(commands.GroupCog):
     """
-    Brawl with your fruits!!!!
+    Brawl with your items!!!!
     """
 
     def __init__(self, bot: "BallsDexBot"):
@@ -156,7 +156,7 @@ class Battle(commands.GroupCog):
         if guild_battle.author_ready and guild_battle.opponent_ready:
             if not (guild_battle.battle.p1_balls and guild_battle.battle.p2_balls):
                 await interaction.response.send_message(
-                    "Both players must add fruits!"
+                    "Both players must add items!"
                 )
                 return
             new_view = create_disabled_buttons()
@@ -259,7 +259,7 @@ class Battle(commands.GroupCog):
 
             embed = discord.Embed(
                 title="Battle Plan",
-                description="Add or remove fruits you want to propose to the other player using the '/battle add' and '/battle remove' commands. Remember, you may add up to **{max_size}** fruits in a deck for this battle. Once you've finished, click the tick button to start the battle.",
+                description="Add or remove items you want to propose to the other player using the '/battle add' and '/battle remove' commands. Remember, you may add up to **{max_size}** items in a deck for this battle. Once you've finished, click the tick button to start the battle.",
                 color=discord.Colour.blurple(),
             )
 
@@ -356,7 +356,7 @@ class Battle(commands.GroupCog):
         self, interaction: discord.Interaction, countryball: BallInstanceTransform
     ):
         """
-        Add a fruit to a battle.
+        Add an item to a battle.
         """
         guild_battle = self.battles.get(interaction.guild_id)
         if not guild_battle:
@@ -426,7 +426,7 @@ class Battle(commands.GroupCog):
         self, interaction: discord.Interaction, countryball: BallInstanceTransform
     ):
         """
-        Remove a fruit from a battle.
+        Remove an item from a battle.
         """
         guild_battle = self.battles.get(interaction.guild_id)
         if not guild_battle:
@@ -489,6 +489,7 @@ class Battle(commands.GroupCog):
             await interaction.response.send_message(
                 f"That ball is not in your deck!", ephemeral=True
             )
+
 
 
 
