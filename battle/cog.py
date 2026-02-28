@@ -368,7 +368,7 @@ class Battle(commands.GroupCog):
             interaction.user == guild_battle.opponent and guild_battle.opponent_ready
         ):
             await interaction.response.send_message(
-                "You cannot change your balls as you are already ready.", ephemeral=True
+                "You cannot change your treasures as you are already ready.", ephemeral=True
             )
             return
 
@@ -489,6 +489,7 @@ class Battle(commands.GroupCog):
             await interaction.response.send_message(
                 f"That ball is not in your deck!", ephemeral=True
             )
+
 
 
 
